@@ -1,0 +1,100 @@
+{% extends 'home_base.html' %}
+{% block home_content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Quicksand', Arial, sans-serif;
+    }
+
+    aside {
+        background-color: #333;
+        color: #fff;
+        width: 200px;
+        height: calc(100vh - 55px); /* Adjust height to leave space for the header */
+        position: fixed;
+        left: 0;
+        top: 55px; /* Adjust to account for the header height */
+        z-index: 998; /* Ensure the sidebar appears below the header */
+        overflow-y: auto; /* Enable scrolling for the sidebar if needed */
+    }
+
+    aside ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    aside ul li {
+        padding: 10px;
+        text-align: center;
+    }
+
+    aside ul li a {
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        transition: background-color 0.3s;
+        border-radius: 10px; /* Make corners round */
+        font-weight: bold; /* Make font bold */
+        margin-bottom: 10px; /* Add space between buttons */
+    }
+
+    aside ul li a:hover {
+        background-color: #0f0;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Add glow effect */
+    }
+
+    main {
+        margin-left: 200px; /* Adjust according to the sidebar width */
+        padding: 20px;
+        margin-top: 120px; /* Adjust to account for the header height */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .block {
+        width: 400px; /* Width of 200px */
+        height: 150px; /* Height of 150px */
+        margin-bottom: 20px;
+        background-color: rgba(28, 152, 28, 0.5); /* Green color */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        padding: 20px;
+        text-align: center;
+        font-size: 1.7em; 
+        color: #fff; /* White text */
+    }
+</style>
+
+<aside>
+    <nav>
+        <ul>
+            <br/><br/>
+            <li><a href="#">Change Password</a></li>
+            <br />
+            <li><a href="{% url 'logout' %}">Logout</a></li> 
+        </ul>
+    </nav>
+</aside>
+<main>
+    <div>
+        <span>
+            <section class="block"><a style="color: #fff;" href="#">In & Out Count</a></section>
+        </span>
+        <span>
+            <section class="block"><a style="color: #fff;" href="#">Object Count</a></section>
+        </span>
+    </div>
+    <div>
+        <span>
+            <section class="block"><a style="color: #fff;" href="#">Object Monitoring</a></section>
+        </span>
+        <span>
+            <section class="block"><a style="color: #fff;" href="{% url 'firedetection' %}">Fire Detection</a></section>
+        </span>
+    </div>
+</main>
+{% endblock %}

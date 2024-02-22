@@ -1,4 +1,5 @@
-{% extends 'home_base.html' %}
+{%extends 'home_base.html' %}
+
 {% block home_content %}
 <style>
     body {
@@ -10,7 +11,7 @@
     aside {
         background-color: #333;
         color: #fff;
-        width: 240px;
+        width: 200px;
         height: calc(100vh - 55px); /* Adjust height to leave space for the header */
         position: fixed;
         left: 0;
@@ -21,12 +22,12 @@
 
     aside ul {
         list-style-type: none;
-        padding: 5;
+        padding: 0;
         margin: 20px 0;
     }
 
     aside ul li {
-        padding: 15px;
+        padding: 10px;
         text-align: center;
     }
 
@@ -52,7 +53,14 @@
         margin-top: 120px; /* Adjust to account for the header height */
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-evenly;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Adjust the size of the video */
+    #video {
+        width: 640px; /* Adjust according to your preference */
+        height: 480px; /* Adjust according to your preference */
     }
 
     .block {
@@ -66,56 +74,64 @@
         text-align: center;
         font-size: 1.7em; 
         color: #fff; /* White text */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .block:hover{
-        background-color: rgb(74, 180, 74);
-        box-shadow: 0 0 25px  rgb(74, 180, 74);
-        
-    }
-    .block a {
-        color: #fff;
-        text-decoration: none; /* Remove underline */
-        font-family: 'Quicksand', Arial, sans-serif; /* Sans-serif font */
-        font-weight: bold; /* Make text bold */
-    }
-
-    .block a:hover {
-        text-decoration: none; /* Remove underline on hover */
-        
     }
 </style>
+
 
 <aside>
     <nav>
         <ul>
             <br/><br/>
-            <li><a href="#">Change Password</a></li>
+            <li><a href="{% url 'start_stop_backend_process' %}?action=start" id="startStopButton">Start</a></li>
             <br />
-            <li><a href="{% url 'logout' %}">Logout</a></li> 
+            <li><a href="{% url 'home' %}">Home</a></li> 
         </ul>
     </nav>
 </aside>
+
 <main>
-    <div>
-        <span>
-            <section class="block"><a href="#">In & Out Count</a></section>
-        </span>
-        <span>
-            <section class="block"><a href="#">Object Count</a></section>
-        </span>
-    </div>
-    <div>
-        <span>
-            <section class="block"><a href="#">Object Monitoring</a></section>
-        </span>
-        <span>
-            <section class="block"><a href="{% url 'firedetection' %}">Fire Detection</a></section>
-        </span>
-    </div>
+    <video id="video" autoplay></video>
 </main>
+
+<script>
+    // Function to start or stop the video
+    function startStopVideo() {
+        var videoElement = document.getElementById('video');
+        var startStopButton = document.getElementById('startStopButton');
+
+        if (videoElement.paused) {
+            // Start the video
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    videoElement.srcObject = stream;
+                    videoElement.style.display = 'block'; // Show the video element
+                })
+                .catch(function(err) {
+                    console.error('Error accessing the camera: ', err);
+                });
+
+            // Change button text to "Stop"
+            startStopButton.textContent = "Stop";
+        } else {
+            // Stop the video
+            var videoTracks = videoElement.srcObject.getTracks();
+            videoTracks.forEach(function(track) {
+                track.stop();
+            });
+            videoElement.srcObject = null;
+            videoElement.style.display = 'none'; // Hide the video element
+
+            // Change button text to "Start"
+            startStopButton.textContent = "Start";
+        }
+    }
+
+    // Add click event listener to the Start/Stop button
+    document.getElementById('startStopButton').addEventListener('click', startStopVideo);
+</script>
+
+
 {% endblock %}
+
+
+

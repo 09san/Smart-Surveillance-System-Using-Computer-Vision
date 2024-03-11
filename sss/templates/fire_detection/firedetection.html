@@ -1,4 +1,9 @@
 {%extends 'home_base.html' %}
+<head>
+    <title>
+        Fire Detection
+    </title>
+</head>
 
 {% block home_content %}
 <style>
@@ -93,6 +98,43 @@
     <video id="video" autoplay></video>
 </main>
 
+<!-- <script>
+    // Function to start or stop the video
+    function startStopVideo() {
+        var videoElement = document.getElementById('video');
+        var startStopButton = document.getElementById('startStopButton');
+
+        if (videoElement.paused) {
+            // Start the video
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    videoElement.srcObject = stream;
+                    videoElement.style.display = 'block'; // Show the video element
+                })
+                .catch(function(err) {
+                    console.error('Error accessing the camera: ', err);
+                });
+
+            // Change button text to "Stop"
+            startStopButton.textContent = "Stop";
+        } else {
+            // Stop the video
+            var videoTracks = videoElement.srcObject.getTracks();
+            videoTracks.forEach(function(track) {
+                track.stop();
+            });
+            videoElement.srcObject = null;
+            videoElement.style.display = 'none'; // Hide the video element
+
+            // Change button text to "Start"
+            startStopButton.textContent = "Start";
+        }
+    }
+
+    // Add click event listener to the Start/Stop button
+    document.getElementById('startStopButton').addEventListener('click', startStopVideo);
+</script> -->
+
 <script>
     // Function to start or stop the video
     function startStopVideo() {
@@ -129,6 +171,59 @@
     // Add click event listener to the Start/Stop button
     document.getElementById('startStopButton').addEventListener('click', startStopVideo);
 </script>
+ 
+
+<!-- <script>
+    // Function to start or stop the video and fire detection backend
+function startStopVideo() {
+    var videoElement = document.getElementById('video');
+    var startStopButton = document.getElementById('startStopButton');
+    var action = videoElement.paused ? 'start' : 'stop'; // Determine action based on video state
+
+    // Make a GET request to start or stop the backend
+    fetch(`/home/firedetection/processing/?action=${action}`, {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+    if (videoElement.paused) {
+        // Start the video
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                videoElement.srcObject = stream;
+                videoElement.style.display = 'block'; // Show the video element
+            })
+            .catch(function(err) {
+                console.error('Error accessing the camera: ', err);
+            });
+
+        // Change button text to "Stop"
+        startStopButton.textContent = "Stop";
+    } else {
+        // Stop the video
+        var videoTracks = videoElement.srcObject.getTracks();
+        videoTracks.forEach(function(track) {
+            track.stop();
+        });
+        videoElement.srcObject = null;
+        videoElement.style.display = 'none'; // Hide the video element
+
+        // Change button text to "Start"
+        startStopButton.textContent = "Start";
+    }
+}
+
+// Add click event listener to the Start/Stop button
+document.getElementById('startStopButton').addEventListener('click', startStopVideo);
+
+</script> -->
+
 
 
 {% endblock %}

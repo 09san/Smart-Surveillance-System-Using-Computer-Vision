@@ -7,6 +7,12 @@ import smtplib     # Library for email sending
 
 from django.http import JsonResponse
 from django.http import HttpResponse
+from django.http.response import StreamingHttpResponse
+
+from django.views.decorators import gzip
+
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 import os
 
@@ -48,13 +54,12 @@ def start_stop_backend_process(request):
         return JsonResponse({'success': False, 'message': 'Invalid action'})
 
 
-def fire_detection_backend(request):
-    def play_alarm_sound_function():
+def play_alarm_sound_function():
         playsound.playsound('static/fire_detection/fire_alarm.mp3', True)
         print("Fire alarm end")
-
-    # Function to send email
-    def send_mail_function():
+        
+# Function to send email
+def send_mail_function():
         recipientmail = "add recipients mail"
         recipientmail = recipientmail.lower()
         try:
@@ -67,48 +72,76 @@ def fire_detection_backend(request):
             server.close()
         except Exception as e:
             print(e)
+            
+            
+
+
+def fire_detection_backend_processing(frame):
+    
+    
     
     # Load the cascade classifier for fire detection
     fire_cascade = cv2.CascadeClassifier('static/fire_detection/fire_detection_cascade_model.xml')
     
-    # Initialize video capture from webcam
-    video_capture = cv2.VideoCapture(0)
-
-    while True:
-        # Capture frame-by-frame
-        ret, frame = video_capture.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        
-        # Detect fires in the frame
-        fires = fire_cascade.detectMultiScale(frame, 1.2, 5)
-
-        for (x, y, w, h) in fires:
-            cv2.rectangle(frame, (x-20, y-20), (x+w+20, y+h+20), (255, 0, 0), 2)
-
-            print("Fire alarm initiated")
-            threading.Thread(target=play_alarm_sound_function).start()
-
-            # Send email notification
-            if not runOnce:
-                print("Mail send initiated")
-                threading.Thread(target=send_mail_function).start()
-                runOnce = True
-
-        # Display the frame
-        cv2.imshow('Fire Detection', frame)
-
-        # Check for key press to exit
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    # Release the video capture and close the window
-    video_capture.release()
-    cv2.destroyAllWindows()
-
-    return HttpResponse("Fire detection backend finished")
-
-
+    # Convert frame to grayscale
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
+    # Detect fires in the frame
+    fires = fire_cascade.detectMultiScale(gray, 1.2, 5)
+    
+    # Process each detected fire
+    for (x, y, w, h) in fires:
+        cv2.rectangle(frame, (x-20, y-20), (x+w+20, y+h+20), (255, 0, 0), 2)
+
+        # Print message and start alarm sound
+        print("Fire detected!")
+        threading.Thread(target=play_alarm_sound_function).start()
+        
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'fire_detection_group', {
+                'type': 'send_fire_detection_event',
+                'event': 'fire_detected',
+            }
+        )
+
+        # Send email notification
+        if not runOnce:
+            print("Sending email notification...")
+            threading.Thread(target=send_mail_function).start()
+            runOnce = True
+    
+    # Convert frame to JPEG format
+    _, jpeg = cv2.imencode('.jpg', frame)
+    return jpeg.tobytes()
+
+
+  
+def fire_detection_feed_generator():
+    cap = cv2.VideoCapture(0)
+    
+    while True:
+        print(cap.read())
+        ret, frame = cap.read()
+        cv2.imshow("Fire Detection", frame)
+        print("Reading frame")
+        if not ret:
+            break
+        processed_frame = fire_detection_backend_processing(frame)
+        cv2.imshow("Fire Detection", frame)
+
+        print("Yielding frame")
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + processed_frame + b'\r\n\r\n')
+
+    cap.release()
+    
+
+
+@gzip.gzip_page
+def fire_detection_feed(request):
+    #print("Video feed request")
+    return StreamingHttpResponse(fire_detection_feed_generator(), content_type='multipart/x-mixed-replace; boundary=frame')
 
 def fire_detection(request):
     return render(request, 'fire_detection/firedetection.html')

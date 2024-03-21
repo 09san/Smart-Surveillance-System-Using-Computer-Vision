@@ -22,4 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('login_app.urls')),
     path('',include('fire_detection.urls')),
+    path('',include('object_movement.urls')),
+    path('',include('in_and_out.urls')) 
+    
 ]

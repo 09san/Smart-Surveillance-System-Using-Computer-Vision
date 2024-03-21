@@ -80,6 +80,18 @@
         font-size: 1.7em; 
         color: #fff; /* White text */
     }
+     /* Center the image frame */
+     #image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 55px); /* Adjust height to leave space for the header */
+    }
+
+    #video {
+        max-width: 100%; /* Ensure the image doesn't exceed its container width */
+        max-height: calc(100vh - 55px); /* Adjust height to leave space for the header */
+    }
 </style>
 
 
@@ -87,16 +99,56 @@
     <nav>
         <ul>
             <br/><br/>
-            <li><a href="{% url 'start_stop_backend_process' %}?action=start" id="startStopButton">Start</a></li>
+            
             <br />
             <li><a href="{% url 'home' %}">Home</a></li> 
         </ul>
     </nav>
 </aside>
 
-<main>
+<!-- <main>
     <video id="video" autoplay></video>
-</main>
+</main> -->
+
+<div id="fireDetectionMessage" style="display: none; color: red; font-weight: bold; font-size: 24px;">Fire Detected!</div>
+    
+<script>
+    var fireDetectionMessage = document.getElementById('fireDetectionMessage');
+
+    // Function to display fire detection message
+    function showFireDetectionMessage() {
+        fireDetectionMessage.style.display = 'block';
+    }
+
+    // Function to hide fire detection message
+    function hideFireDetectionMessage() {
+        fireDetectionMessage.style.display = 'none';
+    }
+
+    // WebSocket connection to receive fire detection events
+    var socket = new WebSocket('ws://localhost:8000/fire_detection_events/');
+
+    socket.onmessage = function(event) {
+        var eventData = JSON.parse(event.data);
+        if (eventData.fire_detected) {
+            showFireDetectionMessage();
+        }
+    };
+
+    socket.onclose = function(event) {
+        hideFireDetectionMessage();
+    };
+
+    socket.onerror = function(error) {
+        hideFireDetectionMessage();
+    };
+</script>
+
+<br>
+
+<div id="image-container">
+    <img id="video" src="{% url 'fire_detection_feed' %}" alt="Fire Detection Feed">
+</div>
 
 <!-- <script>
     // Function to start or stop the video
@@ -133,6 +185,8 @@
 
     // Add click event listener to the Start/Stop button
     document.getElementById('startStopButton').addEventListener('click', startStopVideo);
+
+    
 </script> -->
 
 <script>
@@ -169,7 +223,7 @@
     }
 
     // Add click event listener to the Start/Stop button
-    document.getElementById('startStopButton').addEventListener('click', startStopVideo);
+    //document.getElementById('startStopButton').addEventListener('click', startStopVideo);
 </script>
  
 

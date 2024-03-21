@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IN - OUT Detection</title>
+</head>
+<style>
+    .myCanvas {
+        position: relative;
+        width: 640px; /* Set the width of the canvas */
+        height: 480px; /* Set the height of the canvas */
+        overflow: hidden; /* Hide any overflow */
+    }
+
+    #video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%; /* Set the video width to fill the canvas */
+        height: 100%; /* Set the video height to fill the canvas */
+    }
+</style>
+<body>
+    <div>
+        <h1>IN-OUT Detection</h1>
+        <div class="myCanvas">
+            <img id="video" src="http://127.0.0.1:8000/video_feed" alt="Video Feed">
+        </div>
+    </div>
+</body>
+</html>

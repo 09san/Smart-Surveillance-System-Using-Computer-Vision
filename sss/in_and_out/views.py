@@ -2,13 +2,11 @@ from django.http import StreamingHttpResponse, HttpResponse
 from django.views.decorators import gzip
 import cv2
 import numpy as np
-from django.shortcuts import render
 
 # Load YOLO
-net = cv2.dnn.readNet("static\in_and_out\yolov3-tiny.weights", 
-                      "static\in_and_out\yolov3-tiny.cfg")
+net = cv2.dnn.readNet("C:/Users/jayan/OneDrive/Documents/4th Year Project/sss/static/Inout_Detection/yolov3-tiny.weights", "C:/Users/jayan/OneDrive/Documents/4th Year Project/sss/static/Inout_Detection/yolov3-tiny.cfg")
 classes = []
-with open("static\in_and_out\coco.names", "r") as f:
+with open("C:/Users/jayan/OneDrive/Documents/4th Year Project/sss/static/Inout_Detection/coco.names", "r") as f:
     classes = [line.strip() for line in f]
 
 layer_names = net.getUnconnectedOutLayersNames()
@@ -123,9 +121,11 @@ def video_feed_generator():
 
 # Decorator to compress the video feed
 @gzip.gzip_page
-def in_and_out_feed(request):
+def video_feed(request):
     #print("Video feed request")
     return StreamingHttpResponse(video_feed_generator(), content_type='multipart/x-mixed-replace; boundary=frame')
 
-def in_and_out(request):
-    return render(request, 'in_and_out_count/in_and_out.html')
+# Function to render the HTML page
+def video_feed_view(request):
+    print("Video feed view request")
+    return HttpResponse('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Video Feed</title></head><body><img id="video-feed" src="/video_feed" alt="Video Feed"></body></html>')

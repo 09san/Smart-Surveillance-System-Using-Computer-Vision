@@ -1,0 +1,103 @@
+<head>
+  <title>Fire Detection</title>
+</head>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', Arial, sans-serif;
+  }
+
+  aside {
+    background-color: #333;
+    color: #fff;
+    width: 200px;
+    height: 1000px;
+    position: fixed;
+    left: 0;
+    top: 5px; 
+    z-index: 998; 
+    overflow-y: auto; 
+  }
+
+  aside ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+
+  aside ul li {
+    padding: 10px;
+    text-align: center;
+  }
+
+  aside ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    transition: background-color 0.3s;
+    border-radius: 10px; 
+    font-weight: bold; 
+    margin-bottom: 10px;
+  }
+
+  aside ul li a:hover {
+    background-color: #0f0;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+
+  main {
+    margin-left: 200px; 
+    padding: 20px;
+    margin-top: 120px; 
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Styles for the IN-OUT video */
+  .myCanvas {
+    position: relative;
+    width: 1080px;
+    height: 720px;
+    overflow: hidden;
+    margin-bottom: 20px; /* Add spacing */
+    margin-top: -100px; /* Adjust the margin to move it slightly upwards */
+  }  
+
+  #video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+  }
+
+</style>
+
+
+<aside>
+  <nav>
+    <ul>
+      <br>
+      <li><a href="{% url 'home' %}">Home</a></li> 
+    </ul>
+  </nav>
+</aside>
+
+<main>
+  <div class="myCanvas">
+      <img id="video" src="http://127.0.0.1:8000/video_feed" alt="Video Feed">
+  </div>
+
+  <div class="block">
+     </div>
+</main>
+
+<script>
+  // ... Your existing Fire Detection JavaScript ... 
+</script>
+

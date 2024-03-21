@@ -47,8 +47,7 @@ INSTALLED_APPS = [
     'object_count',
     'object_movement',
     'fire_detection',
-    'login_app',
-    'channels'
+    'login_app'
 ]
 
 MIDDLEWARE = [
@@ -80,8 +79,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'sss.wsgi.application'
-
-ASGI_APPLICATION = 'sss.asgi.application'
 
 
 # Database

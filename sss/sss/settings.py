@@ -41,15 +41,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels'
     
+]
+
+EXTERNAL_APPS=[
     #my applications
     'in_and_out',
     'object_count',
     'object_movement',
     'fire_detection',
     'login_app',
-    'channels'
+    'admin_app',
+    
 ]
+
+INSTALLED_APPS= INSTALLED_APPS + EXTERNAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

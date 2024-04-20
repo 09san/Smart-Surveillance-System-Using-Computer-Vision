@@ -23,6 +23,7 @@ urlpatterns = [
     path('',include('login_app.urls')),
     path('',include('fire_detection.urls')),
     path('',include('object_movement.urls')),
-    path('',include('in_and_out.urls')) 
+    path('',include('in_and_out.urls')) ,
+    path('',include('admin_app.urls')),
     
 ]

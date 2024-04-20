@@ -26,7 +26,7 @@
     }
 
     aside ul li {
-        padding: 15px;
+        padding: 10px;
         text-align: center;
     }
 
@@ -47,17 +47,17 @@
     }
 
     main {
-        margin-left: 200px; /* Adjust according to the sidebar width */
+        margin-left: 240px; /* Adjust according to the sidebar width */
         padding: 20px;
         margin-top: 120px; /* Adjust to account for the header height */
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
+        flex-direction: column; /* Stack blocks vertically */
+        align-items: center; /* Center the blocks horizontally */
     }
 
     .block {
-        width: 400px; /* Width of 200px */
-        height: 150px; /* Height of 150px */
+        width: 900px; /* Occupies full horizontal space */
+        height: 100px; /* Height of 150px */
         margin-bottom: 20px;
         background-color: rgba(28, 152, 28, 0.5); /* Green color */
         border-radius: 10px; /* Rounded corners */
@@ -67,7 +67,6 @@
         font-size: 1.7em; 
         color: #fff; /* White text */
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
     }
@@ -88,6 +87,9 @@
         text-decoration: none; /* Remove underline on hover */
         
     }
+    #fire{
+        margin-bottom: 90px;
+    }
 </style>
 
 <aside>
@@ -95,27 +97,20 @@
         <ul>
             <br/><br/>
             <li><a href="#">Change Password</a></li>
-            <br />
+            
             <li><a href="{% url 'logout' %}">Logout</a></li> 
         </ul>
     </nav>
 </aside>
 <main>
     <div>
-        <span>
-            <section class="block"><a href="{% url 'in_and_out' %}">In & Out Count</a></section>
-        </span>
-        <span>
-            <section class="block"><a href="#">Object Count</a></section>
-        </span>
+        <section class="block"><a href="{% url 'in_and_out' %}">In & Out Count</a></section>
     </div>
     <div>
-        <span>
-            <section class="block"><a href="{% url 'object_monitoring' %}">Object Monitoring</a></section>
-        </span>
-        <span>
-            <section class="block"><a href="{% url 'firedetection' %}">Fire Detection</a></section>
-        </span>
+        <section class="block"><a href="{% url 'object_monitoring' %}">Object Monitoring</a></section>
+    </div>
+    <div>
+        <section class="block" id="fire"><a href="{% url 'firedetection' %}">Fire Detection</a></section>
     </div>
 </main>
 {% endblock %}

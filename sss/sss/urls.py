@@ -20,10 +20,17 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    
+    path('accounts/', include('django.contrib.auth.urls')),
+
     path('',include('login_app.urls')),
     path('',include('fire_detection.urls')),
     path('',include('object_movement.urls')),
     path('',include('in_and_out.urls')) ,
     path('',include('admin_app.urls')),
     
+    
+    
+    path('', include('django.contrib.auth.urls')),  # Django built-in authentication URLs
 ]

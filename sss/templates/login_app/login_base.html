@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>
+        {% block title %} 
+            Title
+        {% endblock %}
+    </title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
         *
@@ -187,7 +191,19 @@
             height: calc(20vw - 2px);
         }
         }
+
        
+        .error-box {
+            margin-bottom: 0px;
+            margin-top: 0%;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
 
 header {
     background-color: #222;
@@ -272,9 +288,7 @@ footer {
                 <h1>⛉AlertGuard</h1>
             </div>
         </span>
-        <span>
-            <a href="{% url 'admin_login' %}">Admin Login</a>
-        </span>
+        
     </header>
     
     {%block login %}

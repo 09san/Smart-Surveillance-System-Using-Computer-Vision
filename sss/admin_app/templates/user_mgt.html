@@ -1,0 +1,160 @@
+{% extends 'home_base.html' %}
+
+{% block title %} 
+    User Management
+{% endblock %}
+
+{% block home_content %}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Quicksand', Arial, sans-serif;
+    }
+
+    aside {
+        background-color: #333;
+        color: #fff;
+        width: 240px;
+        height: calc(100vh - 55px); /* Adjust height to leave space for the header */
+        position: fixed;
+        left: 0;
+        top: 55px; /* Adjust to account for the header height */
+        z-index: 998; /* Ensure the sidebar appears below the header */
+        overflow-y: auto; /* Enable scrolling for the sidebar if needed */
+    }
+
+    aside ul {
+        list-style-type: none;
+        padding: 5;
+        margin: 20px 0;
+    }
+
+    aside ul li {
+        padding: 10px;
+        text-align: center;
+    }
+
+    aside ul li a {
+        color: #fff;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        transition: background-color 0.3s;
+        border-radius: 10px; /* Make corners round */
+        font-weight: bold; /* Make font bold */
+        margin-bottom: 10px; /* Add space between buttons */
+    }
+
+    aside ul li a:hover {
+        background-color: #0f0;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Add glow effect */
+    }
+
+    main {
+        margin-left: 240px; /* Adjust according to the sidebar width */
+        padding: 20px;
+        margin-top: 120px; /* Adjust to account for the header height */
+        display: flex;
+        flex-direction: column; /* Stack blocks vertically */
+        align-items: center; /* Center the blocks horizontally */
+    }
+
+    .block {
+        width: 100%; /* Occupy full horizontal space */
+        margin-bottom: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px; /* Increased padding */
+        text-align: left;
+        font-size: 16px; /* Increased font size */
+    }
+
+    th {
+        background-color: #333;
+        color: #fff;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .update-button, .delete-button {
+        padding: 8px 16px; /* Increased padding */
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px; /* Increased font size */
+    }
+
+    .update-button {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .delete-button {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .update-button a,
+    .delete-button a {
+        color: white; /* Set text color to white */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .update-button:hover,
+    .delete-button:hover {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); /* Add glow effect */
+    }
+</style>
+
+<aside>
+    <nav>
+        <ul>
+            <br/><br/>
+            <li><a href={% url 'admin_home' %}>Home</a></li>
+            <li><a href={% url 'add_user' %}>Add User</a></li> 
+        </ul>
+    </nav>
+</aside>
+<main>
+    <div class="block">
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            {% for user in users %}
+            <tr>
+            
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td class="button-group">
+                    <button class="update-button">
+                        <a href="/update_user/{{user.id}}">
+                            Update
+                        </a>
+                    </button>
+                    <button class="delete-button">
+                        <a href="/delete_user/{{user.id}}">
+                            Delete
+                        </a>
+                    </button>
+                </td>
+            
+            </tr>
+            {% endfor %}
+           
+        </table>
+    </div>
+</main>
+{% endblock %}

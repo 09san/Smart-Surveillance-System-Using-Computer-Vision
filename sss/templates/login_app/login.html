@@ -1,5 +1,9 @@
 {% extends 'login_app/login_base.html' %}
 
+{% block title %} 
+    Login
+{% endblock %}
+
 {%block login %}
 <div class="header">
 
@@ -8,7 +12,28 @@
     <section>
         <div class="signin" >
             <div class="content">
-                <h2>Sign In</h2>
+                <h2>Login</h2>
+
+                <div class="error-box">
+                    {% if error_message %}
+                        <p class="error-message">{{ error_message }}</p>
+                    {% endif %}
+                    
+                    {% if form.errors %}
+                        <p class="error-message">Your username and password didn't match. Please try again.</p>
+                    {% endif %}
+                    
+                    {% if next %}
+                        {% if user.is_authenticated %}
+                        <p class="error-message">Your account doesn't have access to this page. To proceed,
+                        please login with an account that has access.</p>
+                        {% else %}
+                        <p class="error-message">Please login to see this page.</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                
                 <div class="form">
                     <form method="post">
                         {% csrf_token %}
@@ -23,10 +48,18 @@
                         </div>
                         <br/>
                         <div class="inputBox">
+                            {{ form.user_type }}
+                            <i>User Type</i>
+                        </div>
+                        <br/>
+                        <div class="inputBox">
                             <input type="submit" value="Login">
                         </div>
                     </form>
                 </div>
+
+                <!-- {# Assumes you set up the password_reset view in your URLconf #}
+                <p><a href="{% url 'password_reset' %}">Lost password?</a></p> -->
             </div>
         </div>
     </section>

@@ -19,7 +19,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('/')
 
 @login_required  # This decorator ensures that only authenticated users can access this view
 def home(request):

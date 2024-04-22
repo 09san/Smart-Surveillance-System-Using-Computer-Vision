@@ -17,6 +17,9 @@ urlpatterns = [
     path('delete_user/<id>/',views.delete_user , name="delete_user"),
     path('update_user/<id>/',views.update_user , name="update_user"),
     
+    path('fire_logs/', views.fire_logs, name='fire_logs'),
+    path('send_fire_alert/', views.send_email, name='send_fire_alert'),
+    
     path('logout/', user_views.logout_view, name='logout'),
     
     path('login/', views.user_login, name='login'),

@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
 
+from . utils import send_fire_alert
+
 from .models import *
 
 def user_login(request):
@@ -141,3 +143,11 @@ def delete_email(request, id):
     email_to_delete.delete()
     
     return redirect('email_management')
+
+
+def fire_logs(request):
+    
+    return render(request, 'fire_logs.html' )
+
+def send_email(request):
+    send_fire_alert()

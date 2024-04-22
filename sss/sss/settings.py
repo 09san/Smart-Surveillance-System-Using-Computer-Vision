@@ -161,6 +161,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Update with your SMTP server
 EMAIL_PORT = 587  # Update with your SMTP port
 EMAIL_USE_TLS = True  # Set to True if your SMTP server requires TLS
-EMAIL_HOST_USER = 'alertguardsss@gmail.com'  # Update with your email
-EMAIL_HOST_PASSWORD = 'Alertguard@123'  # Update with your email password
+
 

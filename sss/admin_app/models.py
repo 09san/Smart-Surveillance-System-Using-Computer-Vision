@@ -62,6 +62,3 @@ class Email(models.Model):
         return self.email
     
 
-    
-
-

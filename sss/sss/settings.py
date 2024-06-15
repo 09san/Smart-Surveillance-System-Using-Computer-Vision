@@ -162,4 +162,13 @@ EMAIL_HOST = 'smtp.gmail.com'  # Update with your SMTP server
 EMAIL_PORT = 587  # Update with your SMTP port
 EMAIL_USE_TLS = True  # Set to True if your SMTP server requires TLS
 
+#media
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
+STATICFILES_DIR = {
+    os.path.join(BASE_DIR , "public/static")
+}
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'public/static') 
+MEDIA_URL = '/media/'

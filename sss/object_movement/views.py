@@ -5,6 +5,12 @@ import numpy as np
 from skimage.metrics import structural_similarity as ssim
 from django.http.response import StreamingHttpResponse
 
+from django.contrib.auth import get_user
+from admin_app.models import *
+
+from .models import ObjectMovementLogs
+from django.core.files.base import ContentFile
+
 from django.views.decorators import gzip
 
 # Function to process a frame for object monitoring
@@ -17,6 +23,10 @@ def object_monitoring_backend_processing(frame, reference_frame):
         # Motion detected
         print("Motion Detected - SSIM:", motion_score)
         cv2.putText(frame, "Motion Detected", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        
+        # Save object movement log
+        #save_object_movement_log(frame,request)
+        
         # Find contours of the moving object
         cnts, _ = cv2.findContours(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -34,7 +44,7 @@ def calculate_ssim(img1, img2):
     score, _ = ssim(gray1, gray2, full=True)
     return score
 
-def object_monitoring_feed_generator():
+def object_monitoring_feed_generator(request):
     cap = cv2.VideoCapture(0)
     ret, reference_frame = cap.read()
     
@@ -58,7 +68,27 @@ def object_monitoring_feed_generator():
 @gzip.gzip_page
 def object_monitoring_feed(request):
     #print("Video feed request")
-    return StreamingHttpResponse(object_monitoring_feed_generator(), content_type='multipart/x-mixed-replace; boundary=frame')
+    return StreamingHttpResponse(object_monitoring_feed_generator(request), content_type='multipart/x-mixed-replace; boundary=frame')
 
 def object_monitoring(request):
     return render(request, 'object_monitoring/objectmonitoring.html')
+
+
+
+# def save_object_movement_log(frame):
+#     # Get the logged-in user
+#     #user = get_user(request)
+
+#     # Create an instance of ObjectMovementLogs
+#     object_movement_log = ObjectMovementLogs(user=user.username)
+    
+#     # Convert OpenCV frame to BytesIO object
+#     _, buffer = cv2.imencode('.jpg', frame)
+#     image = ContentFile(buffer.tobytes())
+    
+#     # Save the frame as movement_image
+#     object_movement_log.movement_image.save(f"{user.username}_movement.jpg", image)
+    
+#     # Save the instance
+#     object_movement_log.save()
+

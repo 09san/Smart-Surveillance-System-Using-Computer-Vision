@@ -3,11 +3,18 @@ from . import views
 
 from login_app import views as user_views
 
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import views as auth_views
+
+
 urlpatterns = [
 
     #path('admin_login/', views.admin_login, name='admin_login'),
     path('admin_home/', views.admin_home, name='admin_home'),
     
+    path('change_password/', views.change_password , name='change_password'),
+    path('change_password_done/', views.change_password_done , name='change_password_done'),
     
     path('email_management', views.email_management, name='email_management'),
     path('delete_email/<id>/',views.delete_email , name="delete_email"),

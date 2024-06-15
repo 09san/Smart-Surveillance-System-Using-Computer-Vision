@@ -1,8 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+from .forms import ChangePasswordForm
 from .forms import LoginForm, CustomUserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
+
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import views as auth_views
+
 
 from . utils import send_fire_alert
 
@@ -69,8 +76,9 @@ def add_user(request):
         
         user=CustomUser.objects.create(username=username,
                                        email=email,
-        )
-        user.set_password(password) #password is hasshed 
+                                       password=password)
+        
+        #user.set_password(password) #password is hasshed 
         user.save()
         return redirect('user_mgt')
     return render(request, 'add_user.html')
@@ -151,3 +159,46 @@ def fire_logs(request):
 
 def send_email(request):
     send_fire_alert()
+
+def change_password(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if request.method == 'POST':
+            
+            print("POST")
+            print("User's email:", user.password)
+            form = ChangePasswordForm(user,request.POST)
+            if form.is_valid():
+                user = request.user
+                old_password = form.cleaned_data['old_password']
+                new_password = form.cleaned_data['new_password']
+                confirm_password = form.cleaned_data['confirm_password']
+
+                # Check if old password is correct
+                if not user.check_password(old_password) and  request.method == 'POST':
+                    messages.error(request, 'Old password is incorrect.')
+                    return redirect('change_password')
+
+                # Check if new password and confirm password match
+                if new_password != confirm_password:
+                    messages.error(request, 'New password and confirm password do not match.')
+                    return redirect('change_password')
+
+                # Update user's password
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password changed successfully.')
+                return redirect('change_password_done')
+
+        else:
+            print(" NOT POST")
+            user = request.user
+            print("User's email:", user.password)
+            form = ChangePasswordForm(user)
+    else:
+        return render(request, 'login_to_change_password.html')
+
+    return render(request, 'change_password1.html', {'form': form})
+
+def change_password_done(request):
+    return render(request, 'change_password_done.html')
